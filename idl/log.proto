@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package log;
+option go_package = "log";
+import "api.proto";
+import "base.proto";
+
+message Log {
+  uint64 id = 1;
+  string channelName = 2[(api.body)="channelName"];
+  string professionName = 3[(api.body)="professionName"];
+  string parameters = 4[(api.body)="parameters"];
+  string receiver = 5[(api.body)="receiver"];
+  int32 status = 6[(api.body)="status"];
+  string templateName = 7[(api.body)="templateName"];
+  string errMessage = 8[(api.body)="errMessage"];
+  string createdAt = 9;
+  string updatedAt = 10;
+}
+
+message SearchRequest {
+  optional string channel = 1[(api.query)="channel"];
+  optional string profession = 2[(api.query)="profession"];
+  optional string template = 3[(api.query)="template"];
+  repeated string createdAt = 4[(api.query)="createdAt"];
+  optional string status = 5[(api.query)="status"];
+}
+
+message LogListResponse {
+  uint64 total = 1;
+  repeated Log list = 2;
+}
+
+service LogService {
+  rpc List(base.BaseListReq) returns(LogListResponse) {
+    option (api.get) = "/log/list";
+  }
+}

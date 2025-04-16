@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package user;
+option go_package = "user";
+import "api.proto";
+
+message User {
+  uint64 id = 1;
+  string nickname = 2;
+  string username = 3;
+  string mobile = 4;
+  string email = 5;
+  int32 userType = 6[(api.body)="userType"];
+  string position = 7;
+  int32 status = 8;
+  string department = 9;
+  uint64 roleId = 10[(api.body)="roleId"];
+  repeated int64 wxDepartmentId = 11[(api.body)="wxDepartmentId"];
+  string createdAt = 12[(api.body)="createdAt"];
+  string updatedAt = 13[(api.body)="updatedAt"];
+}
+
+
+message UserListResponse {
+  uint64 total = 1;
+  repeated User list = 2;
+}
+
+message InsertUserRequest {
+  string nickname = 1[(api.body)="nickname"];
+  string empno = 2[(api.body)="empno"];
+  string mobile = 3[(api.body)="mobile",(api.vd)="phone($); msg:'请输入正确的手机号码'"];
+  string email = 4[(api.body)="email",(api.vd)="email($); msg:'请输入正确的邮箱'"];
+  string position = 5[(api.body)="position"];
+  int32 status = 6[(api.body)="status",(api.vd)="in($,1,0); msg:'请输入正确的用户状态'"];
+  uint64 roleId = 7[(api.body)="roleId"];
+  repeated int64 wxDepartmentId = 8[(api.body)="wxDepartmentId"];
+}
+
+message UpdateUserRequest {
+  string mobile = 1[(api.body)="mobile",(api.vd)="phone($); msg:'请输入正确的手机号码'"];
+  string email = 2[(api.body)="email",(api.vd)="email($); msg:'请输入正确的邮箱'"];
+  string position = 3[(api.body)="position"];
+  int32 status = 4[(api.body)="status",(api.vd)="in($,1,0); msg:'请输入正确的用户状态'"];
+  uint64 roleId = 5[(api.body)="roleId"];
+  repeated int64 wxDepartmentId = 6[(api.body)="wxDepartmentId"];
+}

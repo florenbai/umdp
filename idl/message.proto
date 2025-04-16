@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package message;
+option go_package = "message";
+import "google/protobuf/struct.proto";
+import "api.proto";
+import "base.proto";
+
+message SendRequest {
+  uint64 templateId = 1[(api.body)="templateId",(api.vd) = "$>0"];
+  string channel = 2[(api.body)="channel"];
+  MessageParameters parameters = 3[(api.body)="parameters"];
+}
+
+message MessageParameters {
+  string id = 1[(api.body)="id"];
+  repeated string receiver = 2[(api.body)="receiver"];
+  repeated string cc = 3[(api.body)="cc"];
+  google.protobuf.Struct variable = 4[(api.body)="variable"];
+}
+
+service MessageService {
+  rpc Send(SendRequest) returns(base.BaseResp) {
+    option (api.post) = "/message/send";
+  }
+}

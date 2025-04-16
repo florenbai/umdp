@@ -1,0 +1,23 @@
+server:
+  log_level: "trace"
+  log_path: "./log"
+  debug_log: "./log/debug.log"
+  access_log: "./log/access.log"
+  error_log: "./log/error.log"
+  addr: "0.0.0.0:8100"
+
+mysql:
+  dsn: ""
+
+redis:
+  address: ""
+  password: ""
+  db: 5
+  max_idle: 10
+
+jwt:
+
+authentication:
+  max_age : 86400
+  enable_session : true
+  auth_secret : "secretKey"

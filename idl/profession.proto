@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package profession;
+option go_package = "profession";
+import "api.proto";
+import "base.proto";
+
+message Profession {
+  uint64 id = 1;
+  string professionName = 2[(api.body)="professionName"];
+  string token = 3[(api.body)="token"];
+  string channels = 4[(api.body)="channels"];
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message ProfessionDetail {
+  uint64 id = 1;
+  string professionName = 2[(api.body)="professionName"];
+  string token = 3[(api.body)="token"];
+  repeated uint64 channels = 4[(api.body)="channels"];
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message ProfessionListResponse {
+  uint64 total = 1;
+  repeated Profession list = 2;
+}
+
+message ProfessionRequest {
+  string professionName = 1[(api.body)="professionName"];
+  string token = 2[(api.body)="token"];
+  repeated uint64 channels = 3[(api.body)="channels"];
+}
+
+service ProfessionService {
+  rpc Create(ProfessionRequest) returns(base.BaseResp) {
+    option (api.post) = "/profession";
+  }
+  rpc Edit(ProfessionRequest) returns(base.BaseResp) {
+    option (api.put) = "/profession/:id";
+  }
+  rpc Delete(base.BaseId) returns(base.BaseResp) {
+    option (api.delete) = "/profession/:id";
+  }
+  rpc List(base.BaseListReq) returns(ProfessionListResponse) {
+    option (api.get) = "/profession/list";
+  }
+  rpc Detail(base.BaseId) returns(ProfessionDetail) {
+    option (api.get) = "/profession/:id";
+  }
+}

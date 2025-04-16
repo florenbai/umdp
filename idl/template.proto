@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package template;
+option go_package = "template";
+import "api.proto";
+import "base.proto";
+import "google/protobuf/struct.proto";
+
+
+message Template {
+  uint64 id = 1;
+  string templateName = 2[(api.body)="templateName"];
+  uint64 professionId = 3[(api.body)="professionId"];
+  int64 retry = 4[(api.body)="retry"];
+  string createdAt = 8;
+  string updatedAt = 9;
+  repeated google.protobuf.Struct config = 10[(api.body)="config"];
+}
+
+message WechatTemplateConfig {
+  uint64 id = 1[(api.body)="id"];
+  int32 messageType = 2[(api.body)="messageType"];
+  optional string content = 3[(api.body)="content"];
+  optional ButtonTemplate buttonTemplate = 4[(api.body)="buttonTemplate"];
+}
+
+message ButtonTemplate {
+  optional string source = 1[(api.body)="source"];
+  MainTitle mainTitle = 2[(api.body)="mainTitle"];
+  repeated HorizontalContentList horizontalContentList = 3[(api.body)="horizontalContentList"];
+  repeated ButtonList buttonList = 4[(api.body)="buttonList"];
+  string callback = 5[(api.body)="callback"];
+}
+
+message MainTitle {
+  string title = 1[(api.body)="title"];
+  string desc = 2[(api.body)="desc"];
+}
+
+message HorizontalContentList {
+  string keyname = 1[(api.body)="keyname"];
+  optional string value = 2[(api.body)="value"];
+}
+
+message ButtonList {
+  string text = 1[(api.body)="text"];
+  int64 style = 2[(api.body)="style"];
+  string key = 3[(api.body)="key"];
+}
+
+message EmailTemplateConfig {
+  uint64 id = 1[(api.body)="id"];
+  string title = 2[(api.body)="title"];
+  string content = 3[(api.body)="content"];
+}
+
+message AliyunTemplateParam {
+  string name = 1[(api.body)="name"];
+  string value = 2[(api.body)="value"];
+}
+
+message AliyunTemplateConfig {
+  uint64 id = 1[(api.body)="id"];
+  string signName = 2[(api.body)="signName"];
+  string templateCode = 3[(api.body)="templateCode"];
+  optional string smsUpExtendCode = 4[(api.body)="SmsUpExtendCode"];
+  optional string outId = 5[(api.body)="outId"];
+  repeated AliyunTemplateParam templateParam= 6[(api.body)="templateParam"];
+}
+
+message TemplateRequest {
+  string templateName = 1[(api.body)="templateName"];
+  uint64 professionId = 2[(api.body)="professionId"];
+  int64 retry = 3[(api.body)="retry"];
+  repeated google.protobuf.Struct config = 10[(api.body)="config"];
+}
+
+message TemplateListData {
+  uint64 id = 1[(api.body)="id"];
+  string templateName = 2[(api.body)="templateName"];
+  uint64 professionId = 3[(api.body)="professionId"];
+  string professionName = 4[(api.body)="professionName"];
+  int64 retry = 5[(api.body)="retry"];
+  string token = 6[(api.body)="token"];
+  string createdAt = 7;
+  string updatedAt = 8;
+}
+
+message TemplateListResponse {
+  uint64 total = 1;
+  repeated TemplateListData list = 2;
+}
+
+service TemplateService {
+  rpc Create(TemplateRequest) returns(base.BaseResp) {
+    option (api.post) = "/template";
+  }
+  rpc Edit(TemplateRequest) returns(base.BaseResp) {
+    option (api.put) = "/template/:id";
+  }
+  rpc Delete(base.BaseId) returns(base.BaseResp) {
+    option (api.delete) = "/template/:id";
+  }
+  rpc List(base.BaseListReq) returns(TemplateListResponse) {
+    option (api.get) = "/template/list";
+  }
+}

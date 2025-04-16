@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package channel;
+option go_package = "channel";
+import "google/protobuf/struct.proto";
+import "api.proto";
+import "base.proto";
+
+message Channel {
+  uint64 id = 1;
+  string channelName = 2[(api.body)="channelName"];
+  string channelTag = 3[(api.body)="channelTag"];
+  google.protobuf.Struct channelConfig = 4[(api.body)="channelConfig"];
+  int32 channelStatus = 5[(api.body)="channelStatus"];
+  string createdAt = 6;
+  string updatedAt = 7;
+}
+
+message ChannelMap {
+  uint64 id = 1;
+  string channelName = 2[(api.body)="channelName"];
+  string channelTag = 3[(api.body)="channelTag"];
+}
+
+message ChannelListResponse {
+  uint64 total = 1;
+  repeated Channel list = 2;
+}
+
+message ChannelRequest {
+  string channelName = 1[(api.body)="channelName"];
+  string channelTag = 2[(api.body)="channelTag"];
+  google.protobuf.Struct channelConfig = 3[(api.body)="channelConfig"];
+  int32 channelStatus = 4[(api.body)="channelStatus"];
+}
+
+service ChannelService {
+  rpc Create(ChannelRequest) returns(base.BaseResp) {
+    option (api.post) = "/channel";
+  }
+  rpc Edit(ChannelRequest) returns(base.BaseResp) {
+    option (api.put) = "/channel/:id";
+  }
+  rpc Delete(base.BaseId) returns(base.BaseResp) {
+    option (api.delete) = "/channel/:id";
+  }
+  rpc List(base.BaseListReq) returns(ChannelListResponse) {
+    option (api.get) = "/channel/list";
+  }
+}
